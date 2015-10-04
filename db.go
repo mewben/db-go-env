@@ -19,12 +19,12 @@ type Database struct {
 var Conn *sqlx.DB
 
 func Setup(db Database) {
-	conn_string := os.Getenv("DATABASE_URL")
+	db_url := os.Getenv("DATABASE_URL")
 
-	if conn_string == "" {
+	if db_url == "" {
 		// dev mode
 		// manually setup connection string
-		conn_string = `host=` + db.DbHost + ` ` +
+		db_url = `host=` + db.DbHost + ` ` +
 			`port=` + db.DbPort + ` ` +
 			`dbname=` + db.DbName + ` ` +
 			`user=` + db.DbUser + ` ` +
@@ -33,10 +33,10 @@ func Setup(db Database) {
 	}
 
 	// connect to database
-	registerDatabase(conn_string)
+	registerDatabase(db_url)
 }
 
-func registerDatabase(conn_string string) {
-	Conn = sqlx.MustConnect("postgres", conn_string)
+func registerDatabase(db_url string) {
+	Conn = sqlx.MustConnect("postgres", db_url)
 	Conn = Conn.Unsafe()
 }
